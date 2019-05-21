@@ -12,14 +12,12 @@
 - name: Add docker repo
   command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
   changed_when: false
-- name: Add ce edge
-  command:  yum-config-manager --enable docker-ce-edge
-  changed_when: false
-- name: Add ce test
-  command:  yum-config-manager --enable docker-ce-test
-  changed_when: false
-- name: Add docker package
-  yum: name=docker-ce state=present update_cache=yes
+- name: install docker packages
+  yum: name={{item}} state=present update_cache=yes
+  with_items:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
 - name: Change docker.service
   lineinfile: dest=/usr/lib/systemd/system/docker.service
      state=present
